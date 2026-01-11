@@ -1,0 +1,380 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #4a6fa5;
+    --accent-light: #6b8cbe;
+    --text: #333;
+    --text-light: #666;
+    --bg: #fafafa;
+    --white: #fff;
+    --border: #e0e0e0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--accent-light);
+}
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+}
+
+.nav-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white);
+    padding: 8rem 2rem 4rem;
+    text-align: center;
+}
+
+.header-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+header h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.tagline {
+    font-size: 1.35rem;
+    font-weight: 500;
+    opacity: 0.95;
+    margin-bottom: 0.25rem;
+}
+
+.affiliation {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+}
+
+.header-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.header-links a {
+    color: var(--white);
+    opacity: 0.9;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.header-links a:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+}
+
+/* Main content */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+section {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* About section */
+#about p {
+    font-size: 1.05rem;
+}
+
+/* Research grid */
+.research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.research-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.research-card h3 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.research-card p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+/* Positions */
+.position {
+    margin-bottom: 2rem;
+}
+
+.position:last-child {
+    margin-bottom: 0;
+}
+
+.position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.org {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+}
+
+.position ul {
+    margin-left: 1.25rem;
+    color: var(--text-light);
+}
+
+.position li {
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+}
+
+/* Publications */
+.publication {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-bottom: 1rem;
+}
+
+.publication:last-child {
+    margin-bottom: 0;
+}
+
+.publication h3 {
+    color: var(--primary);
+    font-size: 1.05rem;
+}
+
+.venue {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.publication p:last-child {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* Education */
+.education-item {
+    margin-bottom: 1.25rem;
+}
+
+.education-item:last-child {
+    margin-bottom: 0;
+}
+
+.distinction {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Skills */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.skill-category h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.skill-category p {
+    font-size: 0.95rem;
+}
+
+/* Contact */
+#contact {
+    text-align: center;
+}
+
+#contact p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.contact-btn:hover {
+    background: var(--secondary);
+    color: var(--white);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    header {
+        padding: 7rem 1.5rem 3rem;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .tagline {
+        font-size: 1.1rem;
+    }
+
+    main {
+        padding: 0 1.5rem;
+    }
+
+    section {
+        padding: 2rem 0;
+    }
+
+    .position-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-links {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}

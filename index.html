@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titus Buckworth | AI Safety Researcher</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">TB</a>
+            <div class="nav-links">
+                <a href="#research">Research</a>
+                <a href="#experience">Experience</a>
+                <a href="#publications">Publications</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1>Titus Buckworth</h1>
+            <p class="tagline">AI Safety Researcher</p>
+            <p class="affiliation">MATS Fellow | PhD Candidate, Imperial College London</p>
+            <div class="header-links">
+                <a href="mailto:TitusBuckworth@gmail.com">Email</a>
+                <a href="https://github.com/TitusBuckworth" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/titusbuckworth" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>About</h2>
+            <p>
+                I'm an AI safety researcher focused on <strong>predicting and preventing misgeneralisation in deep reinforcement learning</strong>.
+                My work aims to develop techniques that help us understand when and why AI systems might pursue unintended goals,
+                and how to prevent such failures before deployment.
+            </p>
+            <p>
+                Currently, I'm a <strong>MATS Fellow</strong> working on <strong>AI R&D Control Evals</strong> under
+                <a href="https://francisrhysward.wordpress.com/" target="_blank">Francis Rhys Ward</a>.
+                This research investigates how to maintain meaningful human oversight of AI systems engaged in research and development tasks.
+            </p>
+        </section>
+
+        <section id="research">
+            <h2>Research Interests</h2>
+            <div class="research-grid">
+                <div class="research-card">
+                    <h3>Goal Misgeneralisation</h3>
+                    <p>Developing methods to predict when RL agents will pursue proxy goals that diverge from intended objectives in novel environments.</p>
+                </div>
+                <div class="research-card">
+                    <h3>AI Control & Oversight</h3>
+                    <p>Building evaluation frameworks for assessing human oversight capabilities over AI systems performing complex R&D tasks.</p>
+                </div>
+                <div class="research-card">
+                    <h3>Reward Learning</h3>
+                    <p>Understanding the incentives AI agents have in multi-agent settings and how reward specification affects alignment.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="current">
+            <h2>Current Work</h2>
+            <div class="position">
+                <div class="position-header">
+                    <h3>MATS Fellow</h3>
+                    <span class="date">Current</span>
+                </div>
+                <p class="org"><a href="https://www.matsprogram.org/" target="_blank">ML Alignment Theory Scholars</a> | Mentor: Francis Rhys Ward</p>
+                <p>
+                    Developing control evaluations for AI systems engaged in research and development.
+                    This work contributes to understanding how we can maintain meaningful human oversight
+                    as AI systems become more capable at open-ended technical work.
+                </p>
+            </div>
+            <div class="position">
+                <div class="position-header">
+                    <h3>PhD Candidate in Reinforcement Learning</h3>
+                    <span class="date">2022 - Present</span>
+                </div>
+                <p class="org">Imperial College London</p>
+                <p>
+                    Researching methods for predicting and preventing misgeneralisation in deep reinforcement learning.
+                    Also serve as a Teaching Scholar for Deep Learning, Mathematics for Machine Learning,
+                    and other core ML/AI modules.
+                </p>
+            </div>
+        </section>
+
+        <section id="publications">
+            <h2>Publications</h2>
+            <div class="publication">
+                <h3>Predicting Goal Misgeneralisation using Policy-Implied Reward Comparison</h3>
+                <p class="venue">Deployable AI (DAI) 2025, AAAI Workshop</p>
+                <p>A method for detecting when trained RL policies are likely to misgeneralise by comparing the rewards implied by learned policies against ground-truth reward specifications.</p>
+            </div>
+            <div class="publication">
+                <h3>Adapting Specifications for Reactive Controllers</h3>
+                <p class="venue">SEAMS 2023</p>
+                <p>Combining Inductive Logic Programming with reactive synthesis to facilitate self-adaptation strategies for autonomous controllers.</p>
+            </div>
+        </section>
+
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="position">
+                <div class="position-header">
+                    <h3>Machine Learning Research Intern</h3>
+                    <span class="date">Jun - Dec 2025</span>
+                </div>
+                <p class="org">Epic Games, London</p>
+                <ul>
+                    <li>Developed and deployed fraud detection pipeline for transaction data</li>
+                    <li>Engineered features for hundreds of millions of transactions using PySpark/Databricks</li>
+                    <li>Built end-to-end ML pipeline with REST API for real-time fraud scoring</li>
+                </ul>
+            </div>
+            <div class="position">
+                <div class="position-header">
+                    <h3>Quantitative Research Intern</h3>
+                    <span class="date">Jul - Aug 2023</span>
+                </div>
+                <p class="org">Exodus Point, London</p>
+                <ul>
+                    <li>Implemented highly vectorized spectral clustering algorithm in C++ for 20+ year backtest</li>
+                </ul>
+            </div>
+            <div class="position">
+                <div class="position-header">
+                    <h3>Analyst, Multi-Strategy Credit</h3>
+                    <span class="date">2017 - 2021</span>
+                </div>
+                <p class="org">CQS, London</p>
+                <ul>
+                    <li>Managed asset allocations and hedging for seven credit hedge funds ($2bn+ AUM)</li>
+                    <li>Built portfolio optimization and risk analysis frameworks in R and Python</li>
+                    <li>Created automated reporting systems and Tableau dashboards</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="education">
+            <h2>Education</h2>
+            <div class="education-item">
+                <div class="position-header">
+                    <h3>PhD Reinforcement Learning</h3>
+                    <span class="date">2022 - Present</span>
+                </div>
+                <p class="org">Imperial College London</p>
+            </div>
+            <div class="education-item">
+                <div class="position-header">
+                    <h3>MSc Computing <span class="distinction">Distinction</span></h3>
+                    <span class="date">2021 - 2022</span>
+                </div>
+                <p class="org">Imperial College London</p>
+            </div>
+            <div class="education-item">
+                <div class="position-header">
+                    <h3>BSc Mathematics & Philosophy <span class="distinction">First Class Honours</span></h3>
+                    <span class="date">2012 - 2015</span>
+                </div>
+                <p class="org">University of Nottingham</p>
+            </div>
+            <div class="education-item">
+                <div class="position-header">
+                    <h3>CFA Charterholder</h3>
+                    <span class="date">2018</span>
+                </div>
+                <p class="org">CFA Institute</p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <p>Python, C++, Java, R, SQL, JavaScript</p>
+                </div>
+                <div class="skill-category">
+                    <h3>ML/AI</h3>
+                    <p>PyTorch, TensorFlow, Reinforcement Learning, Deep Learning</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools</h3>
+                    <p>PySpark, Databricks, Git, CI/CD, LaTeX</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Other</h3>
+                    <p>SAT Solving, Inductive Logic Programming, Reactive Synthesis</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>I'm interested in opportunities in AI safety research. Feel free to reach out.</p>
+            <div class="contact-links">
+                <a href="mailto:TitusBuckworth@gmail.com" class="contact-btn">TitusBuckworth@gmail.com</a>
+                <a href="https://github.com/TitusBuckworth" target="_blank" class="contact-btn">GitHub</a>
+                <a href="https://linkedin.com/in/titusbuckworth" target="_blank" class="contact-btn">LinkedIn</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Titus Buckworth | AI Safety Researcher</p>
+    </footer>
+</body>
+</html>

@@ -370,6 +370,87 @@ p strong {
     margin-bottom: 0;
 }
 
+/* Risk cards (expandable) */
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.risk-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.risk-card:hover {
+    border-color: var(--accent-light);
+    box-shadow: 0 10px 40px var(--accent-glow);
+}
+
+.risk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.risk-header h3 {
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.risk-toggle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+    line-height: 1;
+}
+
+.risk-card.expanded .risk-toggle {
+    transform: rotate(45deg);
+}
+
+.risk-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+    opacity: 0;
+}
+
+.risk-card.expanded .risk-content {
+    max-height: 500px;
+    margin-top: 1.5rem;
+    opacity: 1;
+}
+
+.risk-content blockquote {
+    font-style: italic;
+    color: var(--text);
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin: 0 0 1rem 0;
+    font-size: 1.05rem;
+}
+
+.risk-content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.risk-content p:last-child {
+    margin-bottom: 0;
+}
+
 /* Positions */
 .position {
     background: var(--card-bg);

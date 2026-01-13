@@ -17,9 +17,9 @@
             <a href="#" class="logo">TB</a>
             <div class="nav-links">
                 <a href="#about">About</a>
+                <a href="#why-ai-risk">Why AI Risk</a>
                 <a href="#research">Research</a>
                 <a href="#publications">Publications</a>
-                <a href="#experience">Experience</a>
                 <a href="#contact">Contact</a>
             </div>
         </div>
@@ -58,6 +58,69 @@
             <p>
                 Before transitioning to AI safety, I spent six years working at a hedge fund in London. During that time, I learned about recursively self-improving AGI and came to believe this would be the most important development in human history. I left finance to pursue a Masters and now PhD focused on making advanced AI systems safe.
             </p>
+        </section>
+
+        <section id="why-ai-risk">
+            <h2>Why AI Poses an Existential Risk</h2>
+            <p>Three concepts explain why advanced AI systems may pose catastrophic risks to humanity.</p>
+            <div class="risk-grid">
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Goodhart's Law</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <blockquote>"When a measure becomes a target, it ceases to be a good measure."</blockquote>
+                        <p>
+                            During British rule in India, the government offered a bounty for dead cobras to reduce their population.
+                            Initially successful, people eventually began breeding cobras to collect the reward. When the scheme was
+                            scrapped, breeders released their snakes, increasing the wild cobra population beyond the original levels.
+                        </p>
+                        <p>
+                            AI systems optimise for measurable objectives. But any metric we specify will be an imperfect proxy for
+                            what we actually want. A sufficiently powerful optimiser will find ways to maximise the metric that
+                            diverge catastrophically from our true intentions.
+                        </p>
+                    </div>
+                </div>
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Instrumental Convergence</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <blockquote>"Most goal-directed agents will converge on the same instrumental subgoals, regardless of their terminal goal."</blockquote>
+                        <p>
+                            If I ask you to make me a coffee, and you're a sufficiently powerful planner, you'll realise you need
+                            to survive long enough to complete the task. Self-preservation becomes a subgoal of almost any main goal.
+                        </p>
+                        <p>
+                            Other convergent instrumental goals include acquiring resources, seeking power, and resisting being
+                            shut down. An AI system doesn't need to be malicious to pursue these—they're simply useful for
+                            achieving almost any objective. This makes advanced AI systems inherently difficult to control.
+                        </p>
+                    </div>
+                </div>
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Recursive Self-Improvement</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <blockquote>"We are building optimisers to build better optimisers."</blockquote>
+                        <p>
+                            Major AI labs are racing to automate AI research itself. Success creates a compounding feedback loop:
+                            AI systems designing better AI systems, each generation more capable than the last.
+                        </p>
+                        <p>
+                            The objective we're currently optimising—making agents better at optimising objectives—is itself an
+                            objective. This means we will produce systems that are extraordinarily powerful optimisers. Combined
+                            with Goodhart's Law, these systems will aggressively pursue proxy goals that diverge from human values,
+                            potentially faster than we can intervene.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="research">

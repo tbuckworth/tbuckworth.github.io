@@ -371,27 +371,25 @@ p strong {
 }
 
 /* Risk cards (expandable) */
-.risk-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+.risk-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     margin-top: 2rem;
 }
 
 .risk-card {
     background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 20px;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
     border: 1px solid var(--border);
     backdrop-filter: blur(10px);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .risk-card:hover {
     border-color: var(--accent-light);
-    box-shadow: 0 10px 40px var(--accent-glow);
 }
 
 .risk-header {
@@ -402,12 +400,12 @@ p strong {
 
 .risk-header h3 {
     color: var(--accent);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     margin: 0;
 }
 
 .risk-toggle {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 300;
     color: var(--accent);
     transition: transform 0.3s ease;
@@ -419,18 +417,17 @@ p strong {
 }
 
 .risk-content {
-    max-height: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.risk-content > div {
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease;
-    opacity: 0;
 }
 
 .risk-card.expanded .risk-content {
-    max-height: 500px;
-    margin-top: 1.5rem;
-    opacity: 1;
+    grid-template-rows: 1fr;
 }
 
 .risk-content blockquote {
@@ -438,8 +435,8 @@ p strong {
     color: var(--text);
     border-left: 3px solid var(--accent);
     padding-left: 1rem;
-    margin: 0 0 1rem 0;
-    font-size: 1.05rem;
+    margin: 1.25rem 0 1rem 0;
+    font-size: 1rem;
 }
 
 .risk-content p {
@@ -448,7 +445,7 @@ p strong {
 }
 
 .risk-content p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
 }
 
 /* Positions */

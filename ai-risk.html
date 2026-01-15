@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why AI Poses an Existential Risk | Titus Buckworth</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">TB</a>
+            <div class="nav-links">
+                <a href="index.html#about">About</a>
+                <a href="ai-risk.html">Why AI Risk</a>
+                <a href="index.html#research">Research</a>
+                <a href="index.html#publications">Publications</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="ai-risk-page">
+        <section id="why-ai-risk" class="visible">
+            <h2>Why AI Poses an Existential Risk</h2>
+            <p>There are many ways advanced AI could pose existential risks to humanity. Here are three core concepts that explain why.</p>
+            <div class="risk-list">
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Goodhart's Law</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <div>
+                            <blockquote>"When a measure becomes a target, it ceases to be a good measure."</blockquote>
+                            <p>
+                                During British rule in India, the government offered a bounty for dead cobras to reduce their population.
+                                Initially successful, people eventually began breeding cobras to collect the reward and the population soared.
+                                Their objective was misspecified. But how should they have specified it?
+                            </p>
+                            <p>
+                                AI systems optimise for measurable objectives. But any metric we specify will be an imperfect proxy for
+                                what we actually want. A sufficiently powerful optimiser will find ways to maximise the metric that
+                                diverge from our true intentions—with potentially existential consequences.
+                                For a beautiful geometric explanation of this phenomenon, see <a href="https://www.lesswrong.com/posts/Eu6CvP7c7ivcGM3PJ/goodhart-s-law-in-reinforcement-learning" target="_blank">here</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Instrumental Convergence</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <div>
+                            <blockquote>"Most goal-directed agents will converge on the same instrumental subgoals, regardless of their terminal goal."</blockquote>
+                            <p>
+                                If I ask you to make me a coffee, and you're a sufficiently powerful planner, you'll realise you need
+                                to survive long enough to complete the task. Self-preservation is a natural subgoal for almost any goal.
+                            </p>
+                            <p>
+                                Other convergent instrumental goals include acquiring resources and seeking power.
+                                An AI system doesn't need to be malicious to pursue these—they're simply useful for
+                                achieving almost any objective.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="risk-card" onclick="this.classList.toggle('expanded')">
+                    <div class="risk-header">
+                        <h3>Recursive Self-Improvement</h3>
+                        <span class="risk-toggle">+</span>
+                    </div>
+                    <div class="risk-content">
+                        <div>
+                            <blockquote>AI Labs are trying to automate AI Research and Development."</blockquote>
+                            <p>
+                                When I was about 10 years old, my Dad showed me a spreadsheet he was working on.
+                                He had calculated that if you had invested $1 at 5% interest since Jesus' birth, you would now (this was 2003/4) have enough money to buy an amount of gold that would be 40x the size of earth.
+                                He told me to be wary of compound interest and this early lesson stuck with me.
+                            </p>
+                            <p>
+                                Major AI labs are racing to automate AI Research & Development using AI systems.
+                                If successful, this may result in an intelligence explosion.
+                                Combined with Goodhart's Law, these systems could aggressively pursue proxy goals that, in the extreme, almost certainly diverge from human values.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="risk-conclusion">
+                <p>
+                    <strong>The convergence of these three concepts makes advanced AI potentially very dangerous.</strong>
+                    Recursive self-improvement may produce systems of extraordinary capability. These systems may
+                    pursue human-specified objectives, but due to Goodhart's Law, that objective will inevitably
+                    be a flawed proxy.
+                    Due to instrumental convergence, a sufficiently
+                    powerful AI will seek to acquire resources, preserve itself, and resist shutdown—not out of
+                    malice, but because these subgoals have arisen naturally during training.
+                    The greatest threat to an AI systems ability to self-preserve is humans.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Titus Buckworth | AI Safety Researcher</p>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

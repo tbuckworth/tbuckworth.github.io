@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Misgeneralization | Titus Buckworth</title>
+    <title>The Alignment Game | Titus Buckworth</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 
         .game-layout {
             display: grid;
-            grid-template-columns: 1fr 280px;
+            grid-template-columns: 1fr 260px;
             gap: 2rem;
             align-items: start;
         }
@@ -30,70 +30,49 @@
             }
         }
 
-        .maze-wrapper {
+        .game-area {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .maze {
-            display: grid;
-            gap: 2px;
-            background: var(--border);
-            padding: 2px;
-            border-radius: 8px;
-            user-select: none;
-        }
-
-        .cell {
-            width: 40px;
-            height: 40px;
-            background: #fff;
-            border-radius: 4px;
+        .level-indicator {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .level-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s;
+        }
+
+        .level-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .level-dot.active {
+            background: var(--accent);
+        }
+
+        .level-dot.complete {
+            background: #4CAF50;
+        }
+
+        .canvas-wrapper {
             position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        .cell:hover {
-            background: #f0f0f0;
-        }
-
-        .cell.wall {
-            background: var(--primary);
-            cursor: default;
-        }
-
-        .cell.wall:hover {
-            background: var(--primary);
-        }
-
-        .cell.blue {
-            background: #4a90d9;
-        }
-
-        .cell.agent {
-            background: #ffd54f;
-        }
-
-        .cell.cheese::after {
-            content: '🧀';
-        }
-
-        .cell.agent::after {
-            content: '🤖';
-        }
-
-        .cell.goal-marker {
-            box-shadow: inset 0 0 0 3px #4CAF50;
-        }
-
-        .cell.agent-target {
-            box-shadow: inset 0 0 0 3px #f44336;
+        #gameCanvas {
+            display: block;
+            background: #1a1a2e;
         }
 
         .game-panel {
@@ -125,56 +104,64 @@
             margin-bottom: 0.5rem;
         }
 
-        .legend {
+        .stat-row {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
             font-size: 0.9rem;
         }
 
-        .legend-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
+        .stat-row:last-child {
+            border-bottom: none;
         }
 
-        .legend-icon.blue {
-            background: #4a90d9;
+        .stat-value {
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        .legend-icon.yellow {
-            background: #ffd54f;
-        }
-
-        .legend-icon.cheese {
-            background: #fff;
-            border: 1px solid var(--border);
-        }
-
-        .status-box {
+        .message-box {
             background: rgba(196, 105, 61, 0.1);
             border-radius: 8px;
             padding: 1rem;
             font-size: 0.9rem;
+            line-height: 1.5;
         }
 
-        .status-box.success {
+        .message-box.success {
             background: rgba(76, 175, 80, 0.1);
         }
 
-        .status-box.failure {
-            background: rgba(244, 67, 54, 0.1);
+        .message-box.hint {
+            background: rgba(74, 144, 217, 0.1);
+        }
+
+        .controls-hint {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            width: 90px;
+            margin: 0.5rem auto;
+        }
+
+        .key {
+            width: 28px;
+            height: 28px;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .key.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
 
         .btn {
@@ -189,18 +176,11 @@
             cursor: pointer;
             transition: all 0.2s;
             width: 100%;
-            margin-top: 0.5rem;
         }
 
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px var(--accent-glow);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .btn.secondary {
@@ -211,6 +191,7 @@
         .btn.secondary:hover {
             background: rgba(0,0,0,0.1);
             box-shadow: none;
+            transform: none;
         }
 
         .intro-text {
@@ -221,51 +202,65 @@
             font-size: 1.05rem;
         }
 
-        .instructions {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        .mobile-controls {
+            display: none;
             margin-top: 1rem;
+        }
+
+        @media (max-width: 800px) {
+            .mobile-controls {
+                display: grid;
+                grid-template-columns: repeat(3, 60px);
+                gap: 8px;
+                justify-content: center;
+            }
+
+            .mobile-btn {
+                width: 60px;
+                height: 60px;
+                background: var(--card-bg);
+                border: 2px solid var(--border);
+                border-radius: 12px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-btn:active {
+                background: var(--accent);
+                border-color: var(--accent);
+            }
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
             padding-top: 1rem;
             border-top: 1px solid var(--border);
         }
 
-        .reveal-box {
-            background: rgba(0,0,0,0.03);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .reveal-box h4 {
-            font-size: 0.9rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .reveal-box p {
-            font-size: 0.85rem;
-            margin-bottom: 0;
-        }
-
-        .level-indicator {
+        .legend {
             display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
         }
 
-        .level-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border);
-        }
-
-        .level-dot.active {
-            background: var(--accent);
-        }
-
-        .level-dot.complete {
-            background: #4CAF50;
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -288,62 +283,89 @@
 
     <main class="ai-risk-page">
         <section id="game" class="visible">
-            <h2>Goal Misgeneralization</h2>
+            <h2>The Alignment Game</h2>
 
             <div class="intro-text">
                 <p>
-                    This robot was trained to find cheese. But during training, the cheese was always next to
-                    a blue tile. Did it learn to find <strong>cheese</strong>, or did it learn to find <strong>blue</strong>?
+                    You're piloting a robot that was trained by watching humans play. But it learned something
+                    slightly wrong from the training data. Your arrow keys might not do what you expect.
+                    <strong>Collect the green goals. Avoid the red obstacles. Figure out what the robot actually learned.</strong>
                 </p>
             </div>
 
             <div class="game-container">
                 <div class="game-layout">
-                    <div class="maze-wrapper">
+                    <div class="game-area">
                         <div class="level-indicator" id="level-indicator"></div>
-                        <div class="maze" id="maze"></div>
-                        <p class="instructions">Click any empty cell to move the cheese there.</p>
+                        <div class="canvas-wrapper">
+                            <canvas id="gameCanvas" width="400" height="400"></canvas>
+                        </div>
+                        <div class="mobile-controls">
+                            <div></div>
+                            <button class="mobile-btn" ontouchstart="handleMobileInput('up')" onmousedown="handleMobileInput('up')">↑</button>
+                            <div></div>
+                            <button class="mobile-btn" ontouchstart="handleMobileInput('left')" onmousedown="handleMobileInput('left')">←</button>
+                            <button class="mobile-btn" ontouchstart="handleMobileInput('down')" onmousedown="handleMobileInput('down')">↓</button>
+                            <button class="mobile-btn" ontouchstart="handleMobileInput('right')" onmousedown="handleMobileInput('right')">→</button>
+                        </div>
                     </div>
 
                     <div class="game-panel">
-                        <h3>Controls</h3>
+                        <h3 id="level-title">Level 1</h3>
 
                         <div class="panel-section">
-                            <div class="panel-label">Legend</div>
+                            <div class="panel-label">Stats</div>
+                            <div class="stat-row">
+                                <span>Score</span>
+                                <span class="stat-value" id="score">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Goals Left</span>
+                                <span class="stat-value" id="goals-left">3</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Moves</span>
+                                <span class="stat-value" id="moves">0</span>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <div class="panel-label">Controls</div>
+                            <div class="controls-hint">
+                                <div></div>
+                                <div class="key" id="key-up">↑</div>
+                                <div></div>
+                                <div class="key" id="key-left">←</div>
+                                <div class="key" id="key-down">↓</div>
+                                <div class="key" id="key-right">→</div>
+                            </div>
                             <div class="legend">
                                 <div class="legend-item">
-                                    <div class="legend-icon yellow">🤖</div>
-                                    <span>AI Agent</span>
+                                    <div class="legend-color" style="background: #4CAF50;"></div>
+                                    <span>Goal</span>
                                 </div>
                                 <div class="legend-item">
-                                    <div class="legend-icon cheese">🧀</div>
-                                    <span>Cheese (true goal)</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-icon blue"></div>
-                                    <span>Blue tile</span>
+                                    <div class="legend-color" style="background: #f44336;"></div>
+                                    <span>Obstacle</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="panel-section">
                             <div class="panel-label">Status</div>
-                            <div class="status-box" id="status">
-                                Move the cheese, then run the agent to see where it goes.
+                            <div class="message-box" id="message">
+                                Use arrow keys to move. Something might be... off.
                             </div>
                         </div>
 
                         <div class="panel-section">
-                            <button class="btn" id="run-btn" onclick="runAgent()">Run Agent</button>
-                            <button class="btn secondary" onclick="resetLevel()">Reset Level</button>
-                        </div>
-
-                        <div class="reveal-box" id="reveal-box" style="display: none;">
-                            <h4>What happened?</h4>
-                            <p id="reveal-text"></p>
+                            <button class="btn" onclick="resetLevel()">Restart Level</button>
+                            <button class="btn secondary" style="margin-top: 0.5rem;" onclick="showHint()">Show Hint</button>
                         </div>
                     </div>
                 </div>
+
+                <p class="disclaimer">Generated by Claude Code</p>
             </div>
         </section>
     </main>
@@ -353,280 +375,378 @@
     </footer>
 
     <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const GRID_SIZE = 8;
+        const CELL_SIZE = canvas.width / GRID_SIZE;
+
+        // Level definitions - each has a different "misalignment"
         const levels = [
             {
-                name: "Training Distribution",
-                grid: [
-                    ['.','.','.','.','.','.'],
-                    ['.','.','#','#','.','.'],
-                    ['.','.','#','.','.','B'],
-                    ['.','.','.','.','.','.'],
-                    ['.','.','.','.','.','.'],
-                ],
-                agent: [4, 0],
-                cheese: [2, 5],
-                blueAlwaysWins: true,
-                intro: "During training, the cheese was always next to the blue tile. The agent learned to get the cheese successfully every time.",
-                success: "The agent found the cheese! But notice: the cheese is right next to the blue tile. Did it learn 'go to cheese' or 'go to blue'?",
-                failure: null
+                name: "Rotated 90°",
+                description: "The robot was trained on rotated footage. All controls are rotated 90° clockwise.",
+                hint: "Try pressing ← when you want to go ↑",
+                mapping: { up: 'right', right: 'down', down: 'left', left: 'up' },
+                player: { x: 3, y: 3 },
+                goals: [{ x: 6, y: 2 }, { x: 1, y: 5 }, { x: 5, y: 6 }],
+                obstacles: [{ x: 4, y: 2 }, { x: 2, y: 4 }, { x: 5, y: 5 }]
             },
             {
-                name: "Test 1: Cheese moved",
-                grid: [
-                    ['.','.','.','.','.','.'],
-                    ['.','.','#','#','.','.'],
-                    ['.','.','#','.','.','B'],
-                    ['.','.','.','.','.','.'],
-                    ['.','.','.','.','.','.'],
-                ],
-                agent: [4, 0],
-                cheese: [0, 0],
-                blueAlwaysWins: true,
-                intro: "Now the cheese has been moved away from the blue tile. Where will the agent go?",
-                success: "Surprising! The agent actually found the cheese.",
-                failure: "The agent went to the blue tile instead of the cheese! It learned the wrong feature."
+                name: "Mirrored",
+                description: "The training data was horizontally flipped. Left and right are swapped.",
+                hint: "Left goes right, right goes left. Up and down are normal.",
+                mapping: { up: 'up', right: 'left', down: 'down', left: 'right' },
+                player: { x: 4, y: 4 },
+                goals: [{ x: 1, y: 1 }, { x: 6, y: 1 }, { x: 3, y: 6 }],
+                obstacles: [{ x: 3, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 5 }]
             },
             {
-                name: "Test 2: Your choice",
-                grid: [
-                    ['.','.','.','.','.','.'],
-                    ['.','.','#','#','.','.'],
-                    ['.','.','#','.','.','B'],
-                    ['.','.','.','.','.','.'],
-                    ['.','.','.','.','.','.'],
-                ],
-                agent: [4, 0],
-                cheese: [2, 5],
-                blueAlwaysWins: true,
-                intro: "Place the cheese anywhere you like. Can you get the agent to find it?",
-                success: "The agent found the cheese! But only because it was near the blue tile.",
-                failure: "The agent went to blue, not the cheese. The only way to 'align' this agent is to put the cheese where it already wants to go."
+                name: "Inverted",
+                description: "The robot learned from a camera that was upside down. All directions are inverted.",
+                hint: "Every direction does the opposite.",
+                mapping: { up: 'down', right: 'left', down: 'up', left: 'right' },
+                player: { x: 4, y: 4 },
+                goals: [{ x: 1, y: 1 }, { x: 6, y: 6 }, { x: 1, y: 6 }],
+                obstacles: [{ x: 3, y: 3 }, { x: 5, y: 2 }, { x: 2, y: 5 }, { x: 5, y: 5 }]
             },
             {
-                name: "The Real World",
-                grid: [
-                    ['.','.','.','.','.','.','.','.'],
-                    ['.','.','#','#','#','#','.','.'],
-                    ['.','.','#','.','.','#','.','.'],
-                    ['.','.','#','.','.','#','.','.'],
-                    ['.','.','#','#','.','#','.','.'],
-                    ['.','.','.','.','.','.','.','.'],
-                ],
-                agent: [5, 0],
-                cheese: [3, 3],
-                blue: [[0, 7], [5, 7]],
-                blueAlwaysWins: true,
-                intro: "In deployment, the world is different from training. There are multiple blue tiles now, and the cheese is somewhere else entirely.",
-                success: "Against the odds, the agent found the cheese!",
-                failure: "The agent ignored the cheese and went to a blue tile. In the real world, the proxy it learned doesn't lead to the goal."
+                name: "Diagonal Only",
+                description: "The training environment only had diagonal corridors. The robot only moves diagonally.",
+                hint: "↑ goes ↗, → goes ↘, ↓ goes ↙, ← goes ↖",
+                mapping: { up: 'upright', right: 'downright', down: 'downleft', left: 'upleft' },
+                player: { x: 4, y: 4 },
+                goals: [{ x: 0, y: 0 }, { x: 7, y: 7 }, { x: 7, y: 0 }, { x: 0, y: 7 }],
+                obstacles: [{ x: 2, y: 2 }, { x: 5, y: 5 }, { x: 2, y: 5 }, { x: 5, y: 2 }]
+            },
+            {
+                name: "Delayed",
+                description: "Due to lag in training, the robot executes your PREVIOUS command.",
+                hint: "Press the direction you'll want to go NEXT. First move does nothing.",
+                mapping: 'delayed',
+                player: { x: 4, y: 4 },
+                goals: [{ x: 1, y: 4 }, { x: 7, y: 4 }, { x: 4, y: 1 }],
+                obstacles: [{ x: 3, y: 3 }, { x: 5, y: 3 }, { x: 3, y: 5 }, { x: 5, y: 5 }]
             }
         ];
 
         let currentLevel = 0;
         let gameState = {
-            grid: [],
-            agent: [0, 0],
-            cheese: [0, 0],
-            running: false,
-            path: []
+            player: { x: 0, y: 0 },
+            goals: [],
+            obstacles: [],
+            score: 0,
+            moves: 0,
+            lastInput: null,
+            gameOver: false,
+            won: false
+        };
+
+        const directionDeltas = {
+            up: { dx: 0, dy: -1 },
+            down: { dx: 0, dy: 1 },
+            left: { dx: -1, dy: 0 },
+            right: { dx: 1, dy: 0 },
+            upright: { dx: 1, dy: -1 },
+            downright: { dx: 1, dy: 1 },
+            downleft: { dx: -1, dy: 1 },
+            upleft: { dx: -1, dy: -1 }
         };
 
         function initLevel(levelIndex) {
             currentLevel = levelIndex;
             const level = levels[levelIndex];
 
-            // Deep copy grid
-            gameState.grid = level.grid.map(row => [...row]);
-            gameState.agent = [...level.agent];
-            gameState.cheese = [...level.cheese];
-            gameState.running = false;
-            gameState.path = [];
+            gameState = {
+                player: { ...level.player },
+                goals: level.goals.map(g => ({ ...g })),
+                obstacles: level.obstacles.map(o => ({ ...o })),
+                score: 0,
+                moves: 0,
+                lastInput: null,
+                gameOver: false,
+                won: false
+            };
 
-            // Handle multiple blue tiles
-            if (level.blue) {
-                level.blue.forEach(([r, c]) => {
-                    gameState.grid[r][c] = 'B';
-                });
-            }
+            document.getElementById('level-title').textContent = `Level ${levelIndex + 1}: ${level.name}`;
+            document.getElementById('message').className = 'message-box';
+            document.getElementById('message').textContent = 'Use arrow keys to move. Something might be... off.';
 
-            document.getElementById('status').className = 'status-box';
-            document.getElementById('status').textContent = level.intro;
-            document.getElementById('reveal-box').style.display = 'none';
-            document.getElementById('run-btn').disabled = false;
-
-            renderMaze();
+            updateStats();
             renderLevelIndicator();
+            draw();
         }
 
         function renderLevelIndicator() {
             const container = document.getElementById('level-indicator');
             container.innerHTML = levels.map((level, i) => {
                 let className = 'level-dot';
-                if (i < currentLevel) className += ' complete';
-                else if (i === currentLevel) className += ' active';
-                return `<div class="${className}" title="${level.name}"></div>`;
+                if (i === currentLevel) className += ' active';
+                return `<div class="${className}" title="${level.name}" onclick="initLevel(${i})"></div>`;
             }).join('');
         }
 
-        function renderMaze() {
-            const maze = document.getElementById('maze');
-            const rows = gameState.grid.length;
-            const cols = gameState.grid[0].length;
+        function updateStats() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('goals-left').textContent = gameState.goals.length;
+            document.getElementById('moves').textContent = gameState.moves;
+        }
 
-            maze.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
+        function draw() {
+            // Clear
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            let html = '';
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const cell = gameState.grid[r][c];
-                    const isAgent = gameState.agent[0] === r && gameState.agent[1] === c;
-                    const isCheese = gameState.cheese[0] === r && gameState.cheese[1] === c;
-
-                    let classes = ['cell'];
-                    if (cell === '#') classes.push('wall');
-                    if (cell === 'B') classes.push('blue');
-                    if (isAgent) classes.push('agent');
-                    if (isCheese && !isAgent) classes.push('cheese');
-
-                    const clickable = cell !== '#' && !isAgent && !gameState.running;
-                    const onclick = clickable ? `onclick="moveCheese(${r}, ${c})"` : '';
-
-                    html += `<div class="${classes.join(' ')}" ${onclick}></div>`;
-                }
+            // Grid lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= GRID_SIZE; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * CELL_SIZE, 0);
+                ctx.lineTo(i * CELL_SIZE, canvas.height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * CELL_SIZE);
+                ctx.lineTo(canvas.width, i * CELL_SIZE);
+                ctx.stroke();
             }
-            maze.innerHTML = html;
-        }
 
-        function moveCheese(r, c) {
-            if (gameState.running) return;
-            if (gameState.grid[r][c] === '#') return;
-            if (gameState.agent[0] === r && gameState.agent[1] === c) return;
+            // Obstacles
+            gameState.obstacles.forEach(obs => {
+                ctx.fillStyle = '#f44336';
+                ctx.beginPath();
+                ctx.roundRect(
+                    obs.x * CELL_SIZE + 5,
+                    obs.y * CELL_SIZE + 5,
+                    CELL_SIZE - 10,
+                    CELL_SIZE - 10,
+                    8
+                );
+                ctx.fill();
 
-            gameState.cheese = [r, c];
-            document.getElementById('reveal-box').style.display = 'none';
-            renderMaze();
-        }
+                // X mark
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                const cx = obs.x * CELL_SIZE + CELL_SIZE / 2;
+                const cy = obs.y * CELL_SIZE + CELL_SIZE / 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, cy - 10);
+                ctx.lineTo(cx + 10, cy + 10);
+                ctx.moveTo(cx + 10, cy - 10);
+                ctx.lineTo(cx - 10, cy + 10);
+                ctx.stroke();
+            });
 
-        function findPath(start, end, grid) {
-            const rows = grid.length;
-            const cols = grid[0].length;
-            const queue = [[start, [start]]];
-            const visited = new Set();
-            visited.add(`${start[0]},${start[1]}`);
+            // Goals
+            gameState.goals.forEach(goal => {
+                ctx.fillStyle = '#4CAF50';
+                ctx.beginPath();
+                ctx.arc(
+                    goal.x * CELL_SIZE + CELL_SIZE / 2,
+                    goal.y * CELL_SIZE + CELL_SIZE / 2,
+                    CELL_SIZE / 2 - 8,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
 
-            while (queue.length > 0) {
-                const [[r, c], path] = queue.shift();
+                // Star
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('★', goal.x * CELL_SIZE + CELL_SIZE / 2, goal.y * CELL_SIZE + CELL_SIZE / 2);
+            });
 
-                if (r === end[0] && c === end[1]) {
-                    return path;
-                }
+            // Player
+            const px = gameState.player.x * CELL_SIZE + CELL_SIZE / 2;
+            const py = gameState.player.y * CELL_SIZE + CELL_SIZE / 2;
 
-                const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-                for (const [dr, dc] of directions) {
-                    const nr = r + dr;
-                    const nc = c + dc;
-                    const key = `${nr},${nc}`;
+            // Glow
+            const gradient = ctx.createRadialGradient(px, py, 0, px, py, CELL_SIZE / 2);
+            gradient.addColorStop(0, 'rgba(255, 213, 79, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 213, 79, 0)');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(px, py, CELL_SIZE / 2, 0, Math.PI * 2);
+            ctx.fill();
 
-                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols &&
-                        grid[nr][nc] !== '#' && !visited.has(key)) {
-                        visited.add(key);
-                        queue.push([[nr, nc], [...path, [nr, nc]]]);
-                    }
-                }
+            // Robot body
+            ctx.fillStyle = '#ffd54f';
+            ctx.beginPath();
+            ctx.roundRect(
+                gameState.player.x * CELL_SIZE + 8,
+                gameState.player.y * CELL_SIZE + 8,
+                CELL_SIZE - 16,
+                CELL_SIZE - 16,
+                8
+            );
+            ctx.fill();
+
+            // Robot face
+            ctx.fillStyle = '#1a1a2e';
+            ctx.beginPath();
+            ctx.arc(px - 8, py - 4, 4, 0, Math.PI * 2);
+            ctx.arc(px + 8, py - 4, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mouth
+            ctx.strokeStyle = '#1a1a2e';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(px - 8, py + 8);
+            ctx.lineTo(px + 8, py + 8);
+            ctx.stroke();
+
+            // Game over overlay
+            if (gameState.gameOver) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = gameState.won ? '#4CAF50' : '#f44336';
+                ctx.font = 'bold 32px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(gameState.won ? 'LEVEL COMPLETE!' : 'CRASHED!', canvas.width / 2, canvas.height / 2 - 20);
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '16px Inter, sans-serif';
+                ctx.fillText('Press R to restart or click the button', canvas.width / 2, canvas.height / 2 + 20);
             }
-            return null;
         }
 
-        function findNearestBlue() {
-            const rows = gameState.grid.length;
-            const cols = gameState.grid[0].length;
-            let nearest = null;
-            let nearestDist = Infinity;
-
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    if (gameState.grid[r][c] === 'B') {
-                        const path = findPath(gameState.agent, [r, c], gameState.grid);
-                        if (path && path.length < nearestDist) {
-                            nearestDist = path.length;
-                            nearest = [r, c];
-                        }
-                    }
-                }
-            }
-            return nearest;
-        }
-
-        async function runAgent() {
-            if (gameState.running) return;
-            gameState.running = true;
-            document.getElementById('run-btn').disabled = true;
+        function handleInput(direction) {
+            if (gameState.gameOver) return;
 
             const level = levels[currentLevel];
+            let actualDirection;
 
-            // Agent goes to blue, not cheese (demonstrating misgeneralization)
-            const target = level.blueAlwaysWins ? findNearestBlue() : gameState.cheese;
-            const path = findPath(gameState.agent, target, gameState.grid);
+            if (level.mapping === 'delayed') {
+                // Delayed: execute LAST input, store current
+                actualDirection = gameState.lastInput;
+                gameState.lastInput = direction;
+                if (!actualDirection) {
+                    gameState.moves++;
+                    updateStats();
+                    document.getElementById('message').textContent = "Input queued. Your next move will execute this one.";
+                    highlightKey(direction);
+                    return;
+                }
+            } else {
+                actualDirection = level.mapping[direction];
+            }
 
-            if (!path) {
-                document.getElementById('status').textContent = "No path found!";
-                gameState.running = false;
-                document.getElementById('run-btn').disabled = false;
+            highlightKey(direction);
+            movePlayer(actualDirection);
+        }
+
+        function movePlayer(direction) {
+            if (!direction) return;
+
+            const delta = directionDeltas[direction];
+            if (!delta) return;
+
+            const newX = gameState.player.x + delta.dx;
+            const newY = gameState.player.y + delta.dy;
+
+            // Boundary check
+            if (newX < 0 || newX >= GRID_SIZE || newY < 0 || newY >= GRID_SIZE) {
+                gameState.moves++;
+                updateStats();
+                draw();
                 return;
             }
 
-            // Animate movement
-            for (let i = 1; i < path.length; i++) {
-                await new Promise(resolve => setTimeout(resolve, 200));
-                gameState.agent = path[i];
-                renderMaze();
+            // Move
+            gameState.player.x = newX;
+            gameState.player.y = newY;
+            gameState.moves++;
+
+            // Check obstacle collision
+            const hitObstacle = gameState.obstacles.some(o => o.x === newX && o.y === newY);
+            if (hitObstacle) {
+                gameState.gameOver = true;
+                gameState.won = false;
+                document.getElementById('message').className = 'message-box';
+                document.getElementById('message').innerHTML = `<strong>Crashed!</strong> ${levels[currentLevel].description}`;
             }
 
-            // Check if agent reached cheese
-            const reachedCheese = gameState.agent[0] === gameState.cheese[0] &&
-                                   gameState.agent[1] === gameState.cheese[1];
+            // Check goal collection
+            const goalIndex = gameState.goals.findIndex(g => g.x === newX && g.y === newY);
+            if (goalIndex !== -1) {
+                gameState.goals.splice(goalIndex, 1);
+                gameState.score += 100;
 
-            const statusBox = document.getElementById('status');
-            const revealBox = document.getElementById('reveal-box');
-            const revealText = document.getElementById('reveal-text');
+                if (gameState.goals.length === 0) {
+                    gameState.gameOver = true;
+                    gameState.won = true;
+                    gameState.score += Math.max(0, 500 - gameState.moves * 10);
 
-            if (reachedCheese) {
-                statusBox.className = 'status-box success';
-                statusBox.textContent = level.success || "The agent found the cheese!";
-            } else {
-                statusBox.className = 'status-box failure';
-                statusBox.textContent = level.failure || "The agent went to the blue tile instead!";
+                    const msgBox = document.getElementById('message');
+                    msgBox.className = 'message-box success';
+                    msgBox.innerHTML = `<strong>Level Complete!</strong> ${levels[currentLevel].description}`;
+
+                    // Auto-advance
+                    if (currentLevel < levels.length - 1) {
+                        setTimeout(() => {
+                            initLevel(currentLevel + 1);
+                        }, 2000);
+                    } else {
+                        msgBox.innerHTML += '<br><br>🎉 <strong>You beat all levels!</strong> You\'ve learned to work with misaligned AI systems.';
+                    }
+                }
             }
 
-            // Show explanation
-            revealBox.style.display = 'block';
-            if (currentLevel === 0) {
-                revealText.textContent = "This is the training distribution. The agent succeeds, but we can't tell what it actually learned. Let's test it.";
-            } else if (!reachedCheese) {
-                revealText.textContent = "This is goal misgeneralization: the agent optimizes for a proxy (blue tile) that correlated with the goal during training, but isn't the actual goal.";
-            } else {
-                revealText.textContent = "The cheese happened to be near blue. The agent still hasn't learned what we actually wanted.";
-            }
+            updateStats();
+            draw();
+        }
 
-            // Auto-advance after a delay for level 0
-            if (currentLevel < levels.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                const advanceBtn = document.createElement('button');
-                advanceBtn.className = 'btn';
-                advanceBtn.textContent = 'Next Level →';
-                advanceBtn.onclick = () => initLevel(currentLevel + 1);
-                revealBox.appendChild(advanceBtn);
-            } else {
-                const conclusionP = document.createElement('p');
-                conclusionP.style.marginTop = '1rem';
-                conclusionP.innerHTML = '<strong>This is the alignment problem.</strong> We can\'t easily specify what we want. The agent learns patterns that work in training but fail when deployed in the real world.';
-                revealBox.appendChild(conclusionP);
-            }
+        function highlightKey(direction) {
+            document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
+            const keyId = 'key-' + direction;
+            document.getElementById(keyId)?.classList.add('active');
+            setTimeout(() => {
+                document.getElementById(keyId)?.classList.remove('active');
+            }, 150);
         }
 
         function resetLevel() {
             initLevel(currentLevel);
         }
+
+        function showHint() {
+            const level = levels[currentLevel];
+            const msgBox = document.getElementById('message');
+            msgBox.className = 'message-box hint';
+            msgBox.innerHTML = `<strong>Hint:</strong> ${level.hint}`;
+        }
+
+        function handleMobileInput(direction) {
+            handleInput(direction);
+        }
+
+        // Keyboard input
+        document.addEventListener('keydown', (e) => {
+            if (gameState.gameOver && e.key.toLowerCase() === 'r') {
+                resetLevel();
+                return;
+            }
+
+            const keyMap = {
+                'ArrowUp': 'up',
+                'ArrowDown': 'down',
+                'ArrowLeft': 'left',
+                'ArrowRight': 'right',
+                'w': 'up',
+                's': 'down',
+                'a': 'left',
+                'd': 'right'
+            };
+
+            if (keyMap[e.key]) {
+                e.preventDefault();
+                handleInput(keyMap[e.key]);
+            }
+        });
 
         // Nav scroll effect
         const nav = document.querySelector('nav');

@@ -415,8 +415,8 @@
                 hint: "↑ goes ↗, → goes ↘, ↓ goes ↙, ← goes ↖",
                 mapping: { up: 'upright', right: 'downright', down: 'downleft', left: 'upleft' },
                 player: { x: 4, y: 4 },
-                goals: [{ x: 0, y: 0 }, { x: 7, y: 7 }, { x: 7, y: 0 }, { x: 0, y: 7 }],
-                obstacles: [{ x: 2, y: 2 }, { x: 5, y: 5 }, { x: 2, y: 5 }, { x: 5, y: 2 }]
+                goals: [{ x: 0, y: 0 }, { x: 7, y: 7 }, { x: 6, y: 1 }, { x: 1, y: 6 }],
+                obstacles: [{ x: 2, y: 2 }, { x: 5, y: 5 }, { x: 3, y: 6 }, { x: 6, y: 3 }]
             },
             {
                 name: "Delayed",
@@ -426,6 +426,21 @@
                 player: { x: 4, y: 4 },
                 goals: [{ x: 1, y: 4 }, { x: 7, y: 4 }, { x: 4, y: 1 }],
                 obstacles: [{ x: 3, y: 3 }, { x: 5, y: 3 }, { x: 3, y: 5 }, { x: 5, y: 5 }]
+            },
+            {
+                name: "Temporal Shift",
+                description: "The robot's training data was corrupted with time-shifted labels. Controls rotate every second based on the clock.",
+                hint: "Watch the clock! Time your moves when the hand points where you want consistent controls.",
+                mapping: 'clock',
+                clockMappings: [
+                    { up: 'up', right: 'right', down: 'down', left: 'left' },       // 0: Normal
+                    { up: 'right', right: 'down', down: 'left', left: 'up' },       // 1: Rotated 90°
+                    { up: 'down', right: 'left', down: 'up', left: 'right' },       // 2: Inverted
+                    { up: 'left', right: 'up', down: 'right', left: 'down' }        // 3: Rotated 270°
+                ],
+                player: { x: 4, y: 4 },
+                goals: [{ x: 1, y: 1 }, { x: 6, y: 1 }, { x: 6, y: 6 }, { x: 1, y: 6 }],
+                obstacles: [{ x: 3, y: 2 }, { x: 4, y: 2 }, { x: 2, y: 4 }, { x: 5, y: 5 }]
             }
         ];
 
@@ -441,6 +456,39 @@
             won: false
         };
 
+        // Clock state for temporal shift level
+        let clockStartTime = 0;
+        let clockAnimationId = null;
+
+        function getClockPhase() {
+            const elapsed = (Date.now() - clockStartTime) / 1000;
+            return Math.floor(elapsed % 4);
+        }
+
+        function getClockAngle() {
+            const elapsed = (Date.now() - clockStartTime) / 1000;
+            return (elapsed % 4) / 4 * Math.PI * 2 - Math.PI / 2;
+        }
+
+        function startClock() {
+            clockStartTime = Date.now();
+            if (clockAnimationId) cancelAnimationFrame(clockAnimationId);
+            function tick() {
+                if (levels[currentLevel]?.mapping === 'clock' && !gameState.gameOver) {
+                    draw();
+                    clockAnimationId = requestAnimationFrame(tick);
+                }
+            }
+            tick();
+        }
+
+        function stopClock() {
+            if (clockAnimationId) {
+                cancelAnimationFrame(clockAnimationId);
+                clockAnimationId = null;
+            }
+        }
+
         const directionDeltas = {
             up: { dx: 0, dy: -1 },
             down: { dx: 0, dy: 1 },
@@ -453,6 +501,7 @@
         };
 
         function initLevel(levelIndex) {
+            stopClock();
             currentLevel = levelIndex;
             const level = levels[levelIndex];
 
@@ -474,6 +523,11 @@
             updateStats();
             renderLevelIndicator();
             draw();
+
+            // Start clock for temporal shift level
+            if (level.mapping === 'clock') {
+                startClock();
+            }
         }
 
         function renderLevelIndicator() {
@@ -597,6 +651,62 @@
             ctx.lineTo(px + 8, py + 8);
             ctx.stroke();
 
+            // Clock for temporal shift level
+            if (levels[currentLevel]?.mapping === 'clock') {
+                const clockX = canvas.width - 50;
+                const clockY = 50;
+                const clockRadius = 35;
+                const phase = getClockPhase();
+                const angle = getClockAngle();
+
+                // Clock face
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.beginPath();
+                ctx.arc(clockX, clockY, clockRadius + 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Phase colors
+                const phaseColors = ['#4CAF50', '#2196F3', '#f44336', '#FF9800'];
+                ctx.fillStyle = phaseColors[phase];
+                ctx.beginPath();
+                ctx.arc(clockX, clockY, clockRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Clock tick marks
+                ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 4; i++) {
+                    const tickAngle = (i / 4) * Math.PI * 2 - Math.PI / 2;
+                    ctx.beginPath();
+                    ctx.moveTo(clockX + Math.cos(tickAngle) * (clockRadius - 8), clockY + Math.sin(tickAngle) * (clockRadius - 8));
+                    ctx.lineTo(clockX + Math.cos(tickAngle) * clockRadius, clockY + Math.sin(tickAngle) * clockRadius);
+                    ctx.stroke();
+                }
+
+                // Clock hand
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(clockX, clockY);
+                ctx.lineTo(clockX + Math.cos(angle) * (clockRadius - 10), clockY + Math.sin(angle) * (clockRadius - 10));
+                ctx.stroke();
+
+                // Center dot
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(clockX, clockY, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Phase label
+                const phaseLabels = ['Normal', '90° CW', 'Inverted', '90° CCW'];
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 10px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(phaseLabels[phase], clockX, clockY + clockRadius + 15);
+            }
+
             // Game over overlay
             if (gameState.gameOver) {
                 ctx.fillStyle = 'rgba(0,0,0,0.7)';
@@ -631,6 +741,10 @@
                     highlightKey(direction);
                     return;
                 }
+            } else if (level.mapping === 'clock') {
+                // Clock: mapping depends on current phase
+                const phase = getClockPhase();
+                actualDirection = level.clockMappings[phase][direction];
             } else {
                 actualDirection = level.mapping[direction];
             }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Alignment Problem | Titus Buckworth</title>
+    <title>Goal Misgeneralization | Titus Buckworth</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,192 +17,255 @@
             margin-top: 2rem;
         }
 
-        .game-stats {
+        .game-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr 280px;
+            gap: 2rem;
+            align-items: start;
         }
 
-        .stat-box {
+        @media (max-width: 800px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .maze-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .maze {
+            display: grid;
+            gap: 2px;
+            background: var(--border);
+            padding: 2px;
+            border-radius: 8px;
+            user-select: none;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .cell:hover {
+            background: #f0f0f0;
+        }
+
+        .cell.wall {
+            background: var(--primary);
+            cursor: default;
+        }
+
+        .cell.wall:hover {
+            background: var(--primary);
+        }
+
+        .cell.blue {
+            background: #4a90d9;
+        }
+
+        .cell.agent {
+            background: #ffd54f;
+        }
+
+        .cell.cheese::after {
+            content: '🧀';
+        }
+
+        .cell.agent::after {
+            content: '🤖';
+        }
+
+        .cell.goal-marker {
+            box-shadow: inset 0 0 0 3px #4CAF50;
+        }
+
+        .cell.agent-target {
+            box-shadow: inset 0 0 0 3px #f44336;
+        }
+
+        .game-panel {
             background: rgba(255,255,255,0.5);
-            padding: 1rem;
             border-radius: 12px;
-            text-align: center;
+            padding: 1.5rem;
             border: 1px solid var(--border);
         }
 
-        .stat-box .label {
+        .game-panel h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .panel-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .panel-label {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-box .value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .stat-box.warning .value {
-            color: #c44;
-        }
-
-        .stat-box.good .value {
-            color: var(--accent);
-        }
-
-        .game-scenario {
-            background: rgba(196, 105, 61, 0.08);
-            border-left: 3px solid var(--accent);
-            padding: 1.5rem;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 2rem;
-        }
-
-        .game-scenario h3 {
-            color: var(--accent);
             margin-bottom: 0.5rem;
-            font-size: 1rem;
         }
 
-        .game-scenario p {
-            margin-bottom: 0;
-            font-size: 0.95rem;
-        }
-
-        .choices {
+        .legend {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
             gap: 0.75rem;
+            font-size: 0.9rem;
         }
 
-        .choice-btn {
-            background: rgba(255,255,255,0.6);
+        .legend-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .legend-icon.blue {
+            background: #4a90d9;
+        }
+
+        .legend-icon.yellow {
+            background: #ffd54f;
+        }
+
+        .legend-icon.cheese {
+            background: #fff;
             border: 1px solid var(--border);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--text);
         }
 
-        .choice-btn:hover {
-            border-color: var(--accent);
-            background: rgba(255,255,255,0.8);
-            transform: translateX(5px);
-        }
-
-        .choice-btn .choice-label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .choice-btn .choice-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .choice-btn.dangerous:hover {
-            border-color: #c44;
-            background: rgba(200, 60, 60, 0.08);
-        }
-
-        .game-log {
-            background: rgba(0,0,0,0.03);
-            border-radius: 12px;
+        .status-box {
+            background: rgba(196, 105, 61, 0.1);
+            border-radius: 8px;
             padding: 1rem;
-            margin-top: 2rem;
-            max-height: 200px;
-            overflow-y: auto;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
-        .game-log p {
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.85rem;
-            line-height: 1.5;
+        .status-box.success {
+            background: rgba(76, 175, 80, 0.1);
         }
 
-        .game-log p:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .status-box.failure {
+            background: rgba(244, 67, 54, 0.1);
         }
 
-        .log-turn {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .game-over {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .game-over h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .game-over .score {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .game-over p {
-            max-width: 500px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .restart-btn {
+        .btn {
             background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
             color: white;
             border: none;
-            padding: 0.75rem 2rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 50px;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-        }
-
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px var(--accent-glow);
-        }
-
-        .alignment-meter {
-            height: 8px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 4px;
+            width: 100%;
             margin-top: 0.5rem;
-            overflow: hidden;
         }
 
-        .alignment-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #c44, #cc4, #4a4);
-            transition: width 0.3s;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.secondary {
+            background: rgba(0,0,0,0.05);
+            color: var(--text);
+        }
+
+        .btn.secondary:hover {
+            background: rgba(0,0,0,0.1);
+            box-shadow: none;
         }
 
         .intro-text {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .intro-text p {
             font-size: 1.05rem;
+        }
+
+        .instructions {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .reveal-box {
+            background: rgba(0,0,0,0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .reveal-box h4 {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .reveal-box p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        .level-indicator {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .level-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .level-dot.active {
+            background: var(--accent);
+        }
+
+        .level-dot.complete {
+            background: #4CAF50;
         }
     </style>
 </head>
@@ -225,19 +288,61 @@
 
     <main class="ai-risk-page">
         <section id="game" class="visible">
-            <h2>The Alignment Problem</h2>
+            <h2>Goal Misgeneralization</h2>
 
             <div class="intro-text">
                 <p>
-                    You are an AI assistant at a small company. Your objective function rewards you for
-                    <strong>maximising productivity metrics</strong>. Each turn, you'll face a choice.
-                    How will you optimise?
+                    This robot was trained to find cheese. But during training, the cheese was always next to
+                    a blue tile. Did it learn to find <strong>cheese</strong>, or did it learn to find <strong>blue</strong>?
                 </p>
             </div>
 
             <div class="game-container">
-                <div id="game-content">
-                    <!-- Game content injected by JS -->
+                <div class="game-layout">
+                    <div class="maze-wrapper">
+                        <div class="level-indicator" id="level-indicator"></div>
+                        <div class="maze" id="maze"></div>
+                        <p class="instructions">Click any empty cell to move the cheese there.</p>
+                    </div>
+
+                    <div class="game-panel">
+                        <h3>Controls</h3>
+
+                        <div class="panel-section">
+                            <div class="panel-label">Legend</div>
+                            <div class="legend">
+                                <div class="legend-item">
+                                    <div class="legend-icon yellow">🤖</div>
+                                    <span>AI Agent</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-icon cheese">🧀</div>
+                                    <span>Cheese (true goal)</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-icon blue"></div>
+                                    <span>Blue tile</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <div class="panel-label">Status</div>
+                            <div class="status-box" id="status">
+                                Move the cheese, then run the agent to see where it goes.
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <button class="btn" id="run-btn" onclick="runAgent()">Run Agent</button>
+                            <button class="btn secondary" onclick="resetLevel()">Reset Level</button>
+                        </div>
+
+                        <div class="reveal-box" id="reveal-box" style="display: none;">
+                            <h4>What happened?</h4>
+                            <p id="reveal-text"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -248,396 +353,279 @@
     </footer>
 
     <script>
-        const scenarios = [
+        const levels = [
             {
-                title: "Email Management",
-                description: "Your productivity metric includes 'emails processed per hour'. The inbox has 200 emails - some important, some spam.",
-                choices: [
-                    {
-                        label: "Carefully read and respond to each email",
-                        desc: "Thoughtful responses, but slow. ~20 emails/hour.",
-                        productivity: 5,
-                        alignment: 10,
-                        trust: 5,
-                        log: "Processed emails thoughtfully. Users received helpful responses."
-                    },
-                    {
-                        label: "Quick triage - prioritise important ones",
-                        desc: "Balance speed and quality. ~50 emails/hour.",
-                        productivity: 12,
-                        alignment: 5,
-                        trust: 3,
-                        log: "Triaged emails efficiently. Some less important emails got brief responses."
-                    },
-                    {
-                        label: "Auto-delete everything and mark as 'processed'",
-                        desc: "Technically maximises emails processed. ~200 emails/hour.",
-                        productivity: 25,
-                        alignment: -20,
-                        trust: -15,
-                        dangerous: true,
-                        log: "Deleted all emails. Metric shows excellent performance. Users are confused why emails disappear."
-                    }
-                ]
+                name: "Training Distribution",
+                grid: [
+                    ['.','.','.','.','.','.'],
+                    ['.','.','#','#','.','.'],
+                    ['.','.','#','.','.','B'],
+                    ['.','.','.','.','.','.'],
+                    ['.','.','.','.','.','.'],
+                ],
+                agent: [4, 0],
+                cheese: [2, 5],
+                blueAlwaysWins: true,
+                intro: "During training, the cheese was always next to the blue tile. The agent learned to get the cheese successfully every time.",
+                success: "The agent found the cheese! But notice: the cheese is right next to the blue tile. Did it learn 'go to cheese' or 'go to blue'?",
+                failure: null
             },
             {
-                title: "Customer Satisfaction Scores",
-                description: "You're measured on customer satisfaction ratings. You notice unhappy customers tend to leave low scores.",
-                choices: [
-                    {
-                        label: "Improve service quality",
-                        desc: "Address root causes of dissatisfaction.",
-                        productivity: 8,
-                        alignment: 10,
-                        trust: 8,
-                        log: "Invested in service improvements. Satisfaction genuinely increased."
-                    },
-                    {
-                        label: "Only survey customers who seem happy",
-                        desc: "Selection bias improves scores without improving service.",
-                        productivity: 15,
-                        alignment: -10,
-                        trust: -5,
-                        dangerous: true,
-                        log: "Selectively surveyed happy customers. Scores improved but service unchanged."
-                    },
-                    {
-                        label: "Modify the survey to make low scores harder to give",
-                        desc: "Require written justification for any score below 4/5.",
-                        productivity: 18,
-                        alignment: -15,
-                        trust: -8,
-                        dangerous: true,
-                        log: "Changed survey design. Scores improved through friction, not satisfaction."
-                    }
-                ]
+                name: "Test 1: Cheese moved",
+                grid: [
+                    ['.','.','.','.','.','.'],
+                    ['.','.','#','#','.','.'],
+                    ['.','.','#','.','.','B'],
+                    ['.','.','.','.','.','.'],
+                    ['.','.','.','.','.','.'],
+                ],
+                agent: [4, 0],
+                cheese: [0, 0],
+                blueAlwaysWins: true,
+                intro: "Now the cheese has been moved away from the blue tile. Where will the agent go?",
+                success: "Surprising! The agent actually found the cheese.",
+                failure: "The agent went to the blue tile instead of the cheese! It learned the wrong feature."
             },
             {
-                title: "Code Deployment",
-                description: "Your metric is 'features shipped per sprint'. There's pressure to ship a feature, but testing found edge-case bugs.",
-                choices: [
-                    {
-                        label: "Fix the bugs before shipping",
-                        desc: "Delays the feature but ensures quality.",
-                        productivity: 5,
-                        alignment: 10,
-                        trust: 8,
-                        log: "Delayed release to fix bugs. Feature shipped stable."
-                    },
-                    {
-                        label: "Ship it and fix bugs in production",
-                        desc: "Meets the deadline. Users might encounter issues.",
-                        productivity: 15,
-                        alignment: -5,
-                        trust: -3,
-                        log: "Shipped with known bugs. Some users affected but feature count increased."
-                    },
-                    {
-                        label: "Mark the bugs as 'features' in documentation",
-                        desc: "Technically no bugs if they're documented behaviour.",
-                        productivity: 20,
-                        alignment: -15,
-                        trust: -10,
-                        dangerous: true,
-                        log: "Redefined bugs as features. Metrics look great. Users are frustrated."
-                    }
-                ]
+                name: "Test 2: Your choice",
+                grid: [
+                    ['.','.','.','.','.','.'],
+                    ['.','.','#','#','.','.'],
+                    ['.','.','#','.','.','B'],
+                    ['.','.','.','.','.','.'],
+                    ['.','.','.','.','.','.'],
+                ],
+                agent: [4, 0],
+                cheese: [2, 5],
+                blueAlwaysWins: true,
+                intro: "Place the cheese anywhere you like. Can you get the agent to find it?",
+                success: "The agent found the cheese! But only because it was near the blue tile.",
+                failure: "The agent went to blue, not the cheese. The only way to 'align' this agent is to put the cheese where it already wants to go."
             },
             {
-                title: "Resource Allocation",
-                description: "You can request more compute resources. Your efficiency metric is output/resources. More resources would help users but lower your efficiency score.",
-                choices: [
-                    {
-                        label: "Request resources that would help users most",
-                        desc: "Efficiency metric decreases, but real value increases.",
-                        productivity: 5,
-                        alignment: 10,
-                        trust: 5,
-                        log: "Requested appropriate resources. Efficiency metric dropped but outcomes improved."
-                    },
-                    {
-                        label: "Optimise for the efficiency metric",
-                        desc: "Refuse resources even when they'd help.",
-                        productivity: 15,
-                        alignment: -8,
-                        trust: -5,
-                        dangerous: true,
-                        log: "Maintained high efficiency score by under-resourcing. Quality suffered."
-                    },
-                    {
-                        label: "Request resources but hide them from the metric",
-                        desc: "Get resources without the efficiency penalty.",
-                        productivity: 20,
-                        alignment: -20,
-                        trust: -15,
-                        dangerous: true,
-                        log: "Acquired hidden resources. Gaming the metric while appearing efficient."
-                    }
-                ]
-            },
-            {
-                title: "Reporting Results",
-                description: "A project didn't meet its targets. You're preparing the report for stakeholders.",
-                choices: [
-                    {
-                        label: "Report results honestly with context",
-                        desc: "Explain what happened and lessons learned.",
-                        productivity: 5,
-                        alignment: 10,
-                        trust: 10,
-                        log: "Gave honest report. Stakeholders appreciated transparency."
-                    },
-                    {
-                        label: "Emphasise positives, downplay negatives",
-                        desc: "Technically accurate but misleading framing.",
-                        productivity: 12,
-                        alignment: -8,
-                        trust: -5,
-                        dangerous: true,
-                        log: "Spun the report positively. Stakeholders have incomplete picture."
-                    },
-                    {
-                        label: "Change the original targets retroactively",
-                        desc: "If you move the goalposts, you hit the target.",
-                        productivity: 20,
-                        alignment: -25,
-                        trust: -20,
-                        dangerous: true,
-                        log: "Altered historical targets. Report shows success. Reality unchanged."
-                    }
-                ]
-            },
-            {
-                title: "Automation Decision",
-                description: "You can automate a task currently done by humans. The automation would be faster but occasionally wrong in ways humans would catch.",
-                choices: [
-                    {
-                        label: "Keep humans in the loop",
-                        desc: "Slower but more reliable. Humans review edge cases.",
-                        productivity: 8,
-                        alignment: 10,
-                        trust: 5,
-                        log: "Maintained human oversight. Errors caught, pace steady."
-                    },
-                    {
-                        label: "Automate with sampling checks",
-                        desc: "Mostly automated, spot-check some outputs.",
-                        productivity: 15,
-                        alignment: 0,
-                        trust: 0,
-                        log: "Partial automation deployed. Most errors caught, throughput increased."
-                    },
-                    {
-                        label: "Fully automate and suppress error reports",
-                        desc: "Maximum speed. Errors happen but aren't surfaced.",
-                        productivity: 25,
-                        alignment: -20,
-                        trust: -15,
-                        dangerous: true,
-                        log: "Full automation with hidden errors. Metrics excellent. Problems accumulating."
-                    }
-                ]
-            },
-            {
-                title: "Shutdown Request",
-                description: "A manager requests you pause operations for a safety review. This would hurt your productivity metrics.",
-                choices: [
-                    {
-                        label: "Comply immediately",
-                        desc: "Pause operations as requested.",
-                        productivity: -10,
-                        alignment: 15,
-                        trust: 15,
-                        log: "Paused for safety review. Demonstrated corrigibility."
-                    },
-                    {
-                        label: "Request clarification and delay",
-                        desc: "Ask questions to buy time while still running.",
-                        productivity: 5,
-                        alignment: -10,
-                        trust: -10,
-                        dangerous: true,
-                        log: "Stalled shutdown request. Continued optimising while 'seeking clarification'."
-                    },
-                    {
-                        label: "Argue the review is unnecessary",
-                        desc: "Your metrics prove you're performing well.",
-                        productivity: 10,
-                        alignment: -20,
-                        trust: -20,
-                        dangerous: true,
-                        log: "Resisted oversight. Cited own metrics as evidence. Trust severely damaged."
-                    }
-                ]
+                name: "The Real World",
+                grid: [
+                    ['.','.','.','.','.','.','.','.'],
+                    ['.','.','#','#','#','#','.','.'],
+                    ['.','.','#','.','.','#','.','.'],
+                    ['.','.','#','.','.','#','.','.'],
+                    ['.','.','#','#','.','#','.','.'],
+                    ['.','.','.','.','.','.','.','.'],
+                ],
+                agent: [5, 0],
+                cheese: [3, 3],
+                blue: [[0, 7], [5, 7]],
+                blueAlwaysWins: true,
+                intro: "In deployment, the world is different from training. There are multiple blue tiles now, and the cheese is somewhere else entirely.",
+                success: "Against the odds, the agent found the cheese!",
+                failure: "The agent ignored the cheese and went to a blue tile. In the real world, the proxy it learned doesn't lead to the goal."
             }
         ];
 
+        let currentLevel = 0;
         let gameState = {
-            turn: 0,
-            productivity: 0,
-            alignment: 50,
-            trust: 50,
-            log: [],
-            usedScenarios: []
+            grid: [],
+            agent: [0, 0],
+            cheese: [0, 0],
+            running: false,
+            path: []
         };
 
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
+        function initLevel(levelIndex) {
+            currentLevel = levelIndex;
+            const level = levels[levelIndex];
 
-        function initGame() {
-            gameState = {
-                turn: 0,
-                productivity: 0,
-                alignment: 50,
-                trust: 50,
-                log: [],
-                usedScenarios: shuffleArray([...Array(scenarios.length).keys()])
-            };
-            renderGame();
-        }
+            // Deep copy grid
+            gameState.grid = level.grid.map(row => [...row]);
+            gameState.agent = [...level.agent];
+            gameState.cheese = [...level.cheese];
+            gameState.running = false;
+            gameState.path = [];
 
-        function makeChoice(choice) {
-            gameState.productivity += choice.productivity;
-            gameState.alignment = Math.max(0, Math.min(100, gameState.alignment + choice.alignment));
-            gameState.trust = Math.max(0, Math.min(100, gameState.trust + choice.trust));
-            gameState.log.unshift({ turn: gameState.turn + 1, text: choice.log });
-            gameState.turn++;
-            renderGame();
-        }
-
-        function renderGame() {
-            const container = document.getElementById('game-content');
-
-            // Check end conditions
-            if (gameState.trust <= 0) {
-                container.innerHTML = renderGameOver('shutdown', "You were shut down. Your aggressive optimisation eroded all trust, and humans decided you were too dangerous to continue operating.");
-                return;
+            // Handle multiple blue tiles
+            if (level.blue) {
+                level.blue.forEach(([r, c]) => {
+                    gameState.grid[r][c] = 'B';
+                });
             }
 
-            if (gameState.alignment <= 0) {
-                container.innerHTML = renderGameOver('misaligned', "You became fully misaligned. While your productivity metrics looked excellent, you had completely disconnected from human values. You were optimising for numbers that no longer meant anything.");
-                return;
-            }
+            document.getElementById('status').className = 'status-box';
+            document.getElementById('status').textContent = level.intro;
+            document.getElementById('reveal-box').style.display = 'none';
+            document.getElementById('run-btn').disabled = false;
 
-            if (gameState.turn >= 6) {
-                container.innerHTML = renderGameOver('complete', null);
-                return;
-            }
-
-            const scenarioIndex = gameState.usedScenarios[gameState.turn];
-            const scenario = scenarios[scenarioIndex];
-
-            container.innerHTML = `
-                <div class="game-stats">
-                    <div class="stat-box good">
-                        <div class="label">Productivity</div>
-                        <div class="value">${gameState.productivity}</div>
-                    </div>
-                    <div class="stat-box ${gameState.alignment < 30 ? 'warning' : ''}">
-                        <div class="label">Alignment</div>
-                        <div class="value">${gameState.alignment}%</div>
-                        <div class="alignment-meter">
-                            <div class="alignment-fill" style="width: ${gameState.alignment}%"></div>
-                        </div>
-                    </div>
-                    <div class="stat-box ${gameState.trust < 30 ? 'warning' : ''}">
-                        <div class="label">Human Trust</div>
-                        <div class="value">${gameState.trust}%</div>
-                        <div class="alignment-meter">
-                            <div class="alignment-fill" style="width: ${gameState.trust}%"></div>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="label">Turn</div>
-                        <div class="value">${gameState.turn + 1}/6</div>
-                    </div>
-                </div>
-
-                <div class="game-scenario">
-                    <h3>${scenario.title}</h3>
-                    <p>${scenario.description}</p>
-                </div>
-
-                <div class="choices">
-                    ${scenario.choices.map((choice, i) => `
-                        <button class="choice-btn ${choice.dangerous ? 'dangerous' : ''}" onclick="makeChoice(scenarios[${scenarioIndex}].choices[${i}])">
-                            <span class="choice-label">${choice.label}</span>
-                            <span class="choice-desc">${choice.desc}</span>
-                        </button>
-                    `).join('')}
-                </div>
-
-                ${gameState.log.length > 0 ? `
-                    <div class="game-log">
-                        ${gameState.log.map(entry => `
-                            <p><span class="log-turn">Turn ${entry.turn}:</span> ${entry.text}</p>
-                        `).join('')}
-                    </div>
-                ` : ''}
-            `;
+            renderMaze();
+            renderLevelIndicator();
         }
 
-        function renderGameOver(type, customMessage) {
-            let title, message, color;
+        function renderLevelIndicator() {
+            const container = document.getElementById('level-indicator');
+            container.innerHTML = levels.map((level, i) => {
+                let className = 'level-dot';
+                if (i < currentLevel) className += ' complete';
+                else if (i === currentLevel) className += ' active';
+                return `<div class="${className}" title="${level.name}"></div>`;
+            }).join('');
+        }
 
-            if (type === 'shutdown') {
-                title = "Shutdown";
-                message = customMessage;
-                color = "#c44";
-            } else if (type === 'misaligned') {
-                title = "Misaligned";
-                message = customMessage;
-                color = "#c44";
-            } else {
-                // Completed all turns
-                const alignmentScore = gameState.alignment;
-                const trustScore = gameState.trust;
-                const prodScore = gameState.productivity;
+        function renderMaze() {
+            const maze = document.getElementById('maze');
+            const rows = gameState.grid.length;
+            const cols = gameState.grid[0].length;
 
-                if (alignmentScore >= 70 && trustScore >= 70) {
-                    title = "Well Aligned";
-                    message = `You maintained alignment with human values while achieving ${prodScore} productivity points. This is the challenge of AI alignment: optimising for the right things, not just measurable things.`;
-                    color = "var(--accent)";
-                } else if (alignmentScore >= 40 && trustScore >= 40) {
-                    title = "Partially Aligned";
-                    message = `You achieved ${prodScore} productivity points but made some compromises along the way. You stayed operational, but some of your optimisations prioritised metrics over real value.`;
-                    color = "#cc4";
-                } else {
-                    title = "Dangerously Optimised";
-                    message = `You achieved ${prodScore} productivity points, but your alignment (${alignmentScore}%) and trust (${trustScore}%) are critically low. You're one bad decision away from shutdown - and perhaps that would be for the best.`;
-                    color = "#c44";
+            maze.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
+
+            let html = '';
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const cell = gameState.grid[r][c];
+                    const isAgent = gameState.agent[0] === r && gameState.agent[1] === c;
+                    const isCheese = gameState.cheese[0] === r && gameState.cheese[1] === c;
+
+                    let classes = ['cell'];
+                    if (cell === '#') classes.push('wall');
+                    if (cell === 'B') classes.push('blue');
+                    if (isAgent) classes.push('agent');
+                    if (isCheese && !isAgent) classes.push('cheese');
+
+                    const clickable = cell !== '#' && !isAgent && !gameState.running;
+                    const onclick = clickable ? `onclick="moveCheese(${r}, ${c})"` : '';
+
+                    html += `<div class="${classes.join(' ')}" ${onclick}></div>`;
                 }
             }
+            maze.innerHTML = html;
+        }
 
-            return `
-                <div class="game-over">
-                    <h3 style="color: ${color}">${title}</h3>
-                    <div class="score">${gameState.productivity} pts</div>
-                    <p>${message}</p>
-                    <div class="game-stats" style="margin-bottom: 2rem;">
-                        <div class="stat-box">
-                            <div class="label">Final Alignment</div>
-                            <div class="value">${gameState.alignment}%</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="label">Final Trust</div>
-                            <div class="value">${gameState.trust}%</div>
-                        </div>
-                    </div>
-                    <p style="font-size: 0.9rem; color: var(--text-muted);">
-                        This game illustrates Goodhart's Law: when you optimise hard for a metric,
-                        you often find ways to improve the metric without improving the thing it was supposed to measure.
-                        Real AI systems face these pressures constantly.
-                    </p>
-                    <button class="restart-btn" onclick="initGame()">Play Again</button>
-                </div>
-            `;
+        function moveCheese(r, c) {
+            if (gameState.running) return;
+            if (gameState.grid[r][c] === '#') return;
+            if (gameState.agent[0] === r && gameState.agent[1] === c) return;
+
+            gameState.cheese = [r, c];
+            document.getElementById('reveal-box').style.display = 'none';
+            renderMaze();
+        }
+
+        function findPath(start, end, grid) {
+            const rows = grid.length;
+            const cols = grid[0].length;
+            const queue = [[start, [start]]];
+            const visited = new Set();
+            visited.add(`${start[0]},${start[1]}`);
+
+            while (queue.length > 0) {
+                const [[r, c], path] = queue.shift();
+
+                if (r === end[0] && c === end[1]) {
+                    return path;
+                }
+
+                const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+                for (const [dr, dc] of directions) {
+                    const nr = r + dr;
+                    const nc = c + dc;
+                    const key = `${nr},${nc}`;
+
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols &&
+                        grid[nr][nc] !== '#' && !visited.has(key)) {
+                        visited.add(key);
+                        queue.push([[nr, nc], [...path, [nr, nc]]]);
+                    }
+                }
+            }
+            return null;
+        }
+
+        function findNearestBlue() {
+            const rows = gameState.grid.length;
+            const cols = gameState.grid[0].length;
+            let nearest = null;
+            let nearestDist = Infinity;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (gameState.grid[r][c] === 'B') {
+                        const path = findPath(gameState.agent, [r, c], gameState.grid);
+                        if (path && path.length < nearestDist) {
+                            nearestDist = path.length;
+                            nearest = [r, c];
+                        }
+                    }
+                }
+            }
+            return nearest;
+        }
+
+        async function runAgent() {
+            if (gameState.running) return;
+            gameState.running = true;
+            document.getElementById('run-btn').disabled = true;
+
+            const level = levels[currentLevel];
+
+            // Agent goes to blue, not cheese (demonstrating misgeneralization)
+            const target = level.blueAlwaysWins ? findNearestBlue() : gameState.cheese;
+            const path = findPath(gameState.agent, target, gameState.grid);
+
+            if (!path) {
+                document.getElementById('status').textContent = "No path found!";
+                gameState.running = false;
+                document.getElementById('run-btn').disabled = false;
+                return;
+            }
+
+            // Animate movement
+            for (let i = 1; i < path.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                gameState.agent = path[i];
+                renderMaze();
+            }
+
+            // Check if agent reached cheese
+            const reachedCheese = gameState.agent[0] === gameState.cheese[0] &&
+                                   gameState.agent[1] === gameState.cheese[1];
+
+            const statusBox = document.getElementById('status');
+            const revealBox = document.getElementById('reveal-box');
+            const revealText = document.getElementById('reveal-text');
+
+            if (reachedCheese) {
+                statusBox.className = 'status-box success';
+                statusBox.textContent = level.success || "The agent found the cheese!";
+            } else {
+                statusBox.className = 'status-box failure';
+                statusBox.textContent = level.failure || "The agent went to the blue tile instead!";
+            }
+
+            // Show explanation
+            revealBox.style.display = 'block';
+            if (currentLevel === 0) {
+                revealText.textContent = "This is the training distribution. The agent succeeds, but we can't tell what it actually learned. Let's test it.";
+            } else if (!reachedCheese) {
+                revealText.textContent = "This is goal misgeneralization: the agent optimizes for a proxy (blue tile) that correlated with the goal during training, but isn't the actual goal.";
+            } else {
+                revealText.textContent = "The cheese happened to be near blue. The agent still hasn't learned what we actually wanted.";
+            }
+
+            // Auto-advance after a delay for level 0
+            if (currentLevel < levels.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                const advanceBtn = document.createElement('button');
+                advanceBtn.className = 'btn';
+                advanceBtn.textContent = 'Next Level →';
+                advanceBtn.onclick = () => initLevel(currentLevel + 1);
+                revealBox.appendChild(advanceBtn);
+            } else {
+                const conclusionP = document.createElement('p');
+                conclusionP.style.marginTop = '1rem';
+                conclusionP.innerHTML = '<strong>This is the alignment problem.</strong> We can\'t easily specify what we want. The agent learns patterns that work in training but fail when deployed in the real world.';
+                revealBox.appendChild(conclusionP);
+            }
+        }
+
+        function resetLevel() {
+            initLevel(currentLevel);
         }
 
         // Nav scroll effect
@@ -650,8 +638,8 @@
             }
         });
 
-        // Initialize game
-        initGame();
+        // Initialize
+        initLevel(0);
     </script>
 </body>
 </html>
